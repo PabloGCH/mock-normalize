@@ -1,0 +1,27 @@
+{
+  "name": "mock-normalize",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PabloGCH/mock-normalize.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PabloGCH/mock-normalize/issues"
+  },
+  "homepage": "https://github.com/PabloGCH/mock-normalize#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.6",
+    "handlebars": "^4.7.7",
+    "nodemon": "^2.0.20",
+    "socket.io": "^4.5.3"
+  }
+}
