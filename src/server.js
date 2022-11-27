@@ -1,6 +1,7 @@
 // IMPORTS
 const express = require("express");
 const path = require("path");
+const fakeProducts = require("./mock-products");
 const Container = require("./container.js");
 const MessageManager = require("./messageManager.js");
 const {Server: IOServer} = require("socket.io");
@@ -24,9 +25,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 httpServer.listen(4000, ()=>{"server listening on port 4000"});
 
 
+app.get("/api/products-test", (req, res) => {
+	res.send(fakeProducts(5))
+})
+
 app.get("/*", (req, res) => {
 	res.sendFile("public/client/index.html", {root: __dirname})
 })
+
+
 
 //WEBSOCKETS
 io.on("connection", (socket) => {
