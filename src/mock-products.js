@@ -7,7 +7,7 @@ function generateProducts(amount) {
 		products.push({
 			name: fake.faker.commerce.productName(),
 			price: fake.faker.commerce.price(),
-			imgUrl: fake.faker.image.cats()
+			imgUrl: fake.faker.image.cats("", "", true)
 		})
 	}
 	return products;

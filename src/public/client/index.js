@@ -6,6 +6,19 @@ Handlebars.registerHelper("compareStrings", (a, b, options) => {
 	return a == b ? options.fn(this) : options.inverse(this);
 })
 //FUNCTIONS
+
+const randomProducts = async() => {
+
+	let data = await fetch("/api/products-test");
+	data = await data.json();
+	console.log(data);
+	const response = await fetch("../templates/random.handlebars");
+	const result = await response.text();
+	const template = Handlebars.compile(result);
+	const html = template({products: data});
+	return html;
+}
+
 const productForm = async() => {
 	const response = await fetch("../templates/form.handlebars");
 	const result = await response.text();
@@ -65,6 +78,11 @@ if(window.location.pathname == "/stock") {
 		productTable(data).then(res => {
 			content.innerHTML = res;
 		})
+	})
+}
+if(window.location.pathname == "/random") {
+	randomProducts().then(res => {
+		content.innerHTML = res;
 	})
 }
 if(window.location.pathname == "/form") {

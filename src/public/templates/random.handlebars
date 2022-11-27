@@ -1,0 +1,22 @@
+
+<h2 class="mt-4">Random</h2>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Price</th>
+		</tr>
+	</thead>
+	<tbody>
+			{{#each products}}
+				<tr>
+					<td>{{this.name}}</td>
+					<td>{{this.price}}</td>
+					<td>
+						<img src={{this.imgUrl}} class="table-img"></img>
+					</td>
+				</tr>
+			{{/each}}
+	</tbody>
+
+</table>
