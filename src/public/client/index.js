@@ -5,13 +5,24 @@ let currentUserEmail = "";
 Handlebars.registerHelper("compareStrings", (a, b, options) => {
 	return a == b ? options.fn(this) : options.inverse(this);
 })
+//NORMALIZER SCHEMAS
+const authorSchema = new normalizr.schema.Entity("authors", {}, {idAttribute:"email"});
+
+const messageSchema = new normalizr.schema.Entity("messages", {
+	author: authorSchema
+})
+
+const chatSchema = new normalizr.schema.Entity("chat", {
+	messages: [messageSchema]
+})
+
+
 //FUNCTIONS
 
 const randomProducts = async() => {
 
 	let data = await fetch("/api/products-test");
 	data = await data.json();
-	console.log(data);
 	const response = await fetch("../templates/random.handlebars");
 	const result = await response.text();
 	const template = Handlebars.compile(result);
@@ -50,6 +61,7 @@ const productFormSubmit = () => {
 }
 
 const chatSection = async(data, user) => {
+	console.log(data)
 	Object.assign(data, {user: user})
 	const response = await fetch("../templates/chat.handlebars");
 	const result = await response.text();
@@ -64,7 +76,9 @@ const sendMessage = () => {
 	let message = document.getElementById("message").value;
 	let date = new Date();
 	let newMessage = {
-		email: currentUserEmail,
+		author: {
+			email: currentUserEmail,
+		},
 		date: date.getDate().toString() + "/" + date.getMonth().toString() + "/" + date.getFullYear().toString() + " - " + date.getHours().toString() + ":" + date.getMinutes().toString() + ":" + date.getSeconds().toString(),
 		message: message
 	}
@@ -92,7 +106,8 @@ if(window.location.pathname == "/form") {
 }
 if(window.location.pathname == "/chat") {
 	socket.on("messages", data => {
-		chatSection(data, currentUserEmail).then(res => {
+		let denormData = normalizr.denormalize(data.result, chatSchema,data.entities); 
+		chatSection(denormData, currentUserEmail).then(res => {
 			content.innerHTML = res;
 			document.getElementById("email").value = currentUserEmail;
 			let messageBox = document.getElementById("message-box");

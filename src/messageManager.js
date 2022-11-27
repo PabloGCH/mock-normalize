@@ -1,7 +1,6 @@
 const fs = require('fs');
 
 class MessageManager {
-
 	constructor(fileDir) {
 		this.fileDir = fileDir;
 	}
@@ -34,12 +33,15 @@ class MessageManager {
 	async save(object) {
 		try {
 			let file = await this.readFile();
+			let id = file[file.length - 1].id || 0;
+			id++
 			let newObject = {
-				email: object.email,
-				date: object.date,
-				message: object.message
+				id: id,
+				author: object.author,
+				message: object.message,
+				date: object.date
 			};
-			if(newObject.message && newObject.email) {
+			if(newObject.message && newObject.author.email) {
 				file.push(newObject);
 				this.writeFile(file);
 				return newObject;

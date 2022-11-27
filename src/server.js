@@ -2,6 +2,7 @@
 const express = require("express");
 const path = require("path");
 const fakeProducts = require("./mock-products");
+const msgNorm = require("./message-normalizer");
 const Container = require("./container.js");
 const MessageManager = require("./messageManager.js");
 const {Server: IOServer} = require("socket.io");
@@ -41,7 +42,7 @@ io.on("connection", (socket) => {
 		socket.emit("products", {products: products})
 	})
 	messageManager.getAll().then(messages => {
-		socket.emit("messages", {messages: messages})
+		socket.emit("messages", msgNorm(messages))
 	})
 	socket.on("newProduct", data => {
 		let product = data;
@@ -55,7 +56,7 @@ io.on("connection", (socket) => {
 	socket.on("newMessage", data => {
 		messageManager.save(data).then(() => {
 			messageManager.getAll().then(messages => {
-				io.sockets.emit("messages", {messages: messages})
+				io.sockets.emit("messages", msgNorm(messages))
 			})
 		})
 	})
